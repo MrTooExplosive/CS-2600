@@ -7,10 +7,19 @@ void playGame(int max);
 int main()
 {
    short choice;
-   unsigned int maximum = 10;
+   unsigned int maximum ;
    time_t t;
    srand((unsigned) (time)&t);
 
+
+   //Read in saved maximum
+   FILE *maxFile = fopen("maximum.txt", "r");
+   if (maxFile != NULL)
+      fscanf(maxFile, "%u", &maximum);
+   else
+      maximum = 10;
+   fclose(maxFile);
+   
    do 
    {
       //Create menu
@@ -29,6 +38,11 @@ int main()
          scanf("%u", &maximum);
       }
    } while (choice != 3);
+
+   //Save current maximum
+   maxFile = fopen("maximum.txt", "w");
+   fprintf(maxFile, "%u", maximum);
+   fclose(maxFile);
 
    printf("\nThank you for playing!");
    return 0;
