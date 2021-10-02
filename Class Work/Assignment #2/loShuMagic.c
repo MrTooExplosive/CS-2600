@@ -1,16 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 //Function to find if a given array is a Lo Shu Magic sqaure
 int isLoShuMagic(const int square[3][3]);
 
 int main()
 {
-   int testSquare[3][3] = {{4,9,2}, 
-                           {3,5,7}, 
-                           {8,1,6}};
-   printf(isLoShuMagic(testSquare) ? "True" : "False");
+   //Seed random generator
+   time_t timeT;
+   srand(time(NULL));
+
+   unsigned long count = 0;
+   int square[3][3];
+   do
+   {
+      count++;
+      for (int row = 0; row < 3; row++)
+      {
+         for (int col = 0; col < 3; col++)
+            square[row][col] = 1 + rand() % 9;
+      }
+   } while (!isLoShuMagic(square));
+   printf("Lo Shu Magic Square found!\n");
+   for (int row = 0; row < 3; row++)
+   {
+      printf("[ ");
+      for (int col = 0; col < 3; col++)
+         printf("%d ", square[row][col]);
+      printf("]\n");
+   }
+   printf("Total number of squares tested: %d", count);
    return EXIT_SUCCESS;
 }
 
@@ -25,7 +46,7 @@ int isLoShuMagic(const int square[3][3])
          int digit = square[row][col];
          if (digit < 1 || digit > 9)   //Check if the number is bounded correctly
             return 0;
-         if (strchr(digits,(char)digit) != NULL) //Check if the number was already in the square
+         if (strchr(digits,digit + 48) != NULL) //Check if the number was already in the square
             return 0;
          char characterVersion = digit + 48;
          strncat(digits,&characterVersion,1);
